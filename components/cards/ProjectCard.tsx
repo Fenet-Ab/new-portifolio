@@ -31,15 +31,29 @@ export default function ProjectCard({ project }: { project: Project }) {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                <Link
-                    href={`/projects/${project.slug}`}
-                    className="flex items-center gap-2 text-sm font-medium text-white hover:text-yellow-400 transition-colors"
-                >
-                    Read details
-                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                </Link>
+                {project.demo ? (
+                    <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 text-sm font-medium text-white hover:text-yellow-400 transition-colors"
+                    >
+                        Visit page
+                        <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </a>
+                ) : (
+                    <Link
+                        href={`/projects/${project.slug}`}
+                        className="flex items-center gap-2 text-sm font-medium text-white hover:text-yellow-400 transition-colors"
+                    >
+                        Visit page
+                        <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </Link>
+                )}
 
                 {project.demo && (
                     <a

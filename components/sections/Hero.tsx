@@ -8,7 +8,7 @@ export default function Hero() {
                 <div className="space-y-6 relative z-10">
 
 
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight">
+                    <h1 className="mt-20 text-5xl md:text-7xl font-bold tracking-tight leading-tight">
                         Hello, <br />
                         <span className="text-transparent text-yellow-400">
                             I&apos;m  Fenet
@@ -20,18 +20,21 @@ export default function Hero() {
                     </h2>
 
                     <p className="text-gray-400 text-lg max-w-lg leading-relaxed">
-                        I build exceptional digital experiences that are fast, accessible,
+                        I build digital experiences that are fast, accessible,
                         and visually stunning. Passionate about merging clean code with
-                        premium design.
+                        premium design. Additionally, I am an AI enthusiast specializing in AI.
                     </p>
 
                     <div className="flex flex-wrap gap-4 pt-4">
-                        <Link
-                            href="/projects"
-                            className="text-white px-8 py-3 rounded-full border-2 border-yellow-400 font-bold hover:bg-yellow-500 hover:bg-transparent  shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+                        <a
+                            href="/Fenet_Abilu_CV.pdf"
+                            download
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white px-8 py-3 rounded-full border-2 border-yellow-400 font-bold hover:bg-yellow-500 hover:bg-transparent  shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all duration-300"
                         >
                             Download CV
-                        </Link>
+                        </a>
                         <Link
                             href="/contact"
                             className="px-8 py-3 rounded-full border border-yellow-400 hover:bg-white/5 transition-colors font-medium backdrop-blur-sm"

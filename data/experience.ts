@@ -27,5 +27,12 @@ export const experiences: Experience[] = [
         range: '2025 (ongoing)',
         summary:
             'Machine learning, data engineering and analysis program with hands-on projects using Python, NumPy, Pandas, and Scikit-learn.'
+    },
+    {
+        title: 'HerCommerce Hackathon Program',
+        company: 'ICE Addis & ALX Ethiopia',
+        range: '2025 (Certified)',
+        summary:
+            'Participated in the HerCommerce Hackathon program and successfully completed the challenge. Designed and developed both web and mobile applications during the hackathon. Collaborated intensively in a time-constrained environment to deliver functional solutions.'
     }
 ];

@@ -1,12 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import { Mail, Send, CheckCircle, AlertCircle, Loader2, ExternalLink, Info, FilePlayIcon } from 'lucide-react';
-import emailjs from '@emailjs/browser';
-
-// Initialize EmailJS with your public key
-// emailjs.init('DjfzYTfRDlN2CLQbQ'); // Removed in favor of passing publicKey in sendForm
+import { Mail, Send, CheckCircle, AlertCircle, Loader2, ExternalLink, Info } from 'lucide-react';
+import { FaTelegram, FaWhatsapp, FaYoutube, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 const ContactPage = () => {
     const form = useRef<HTMLFormElement>(null);
@@ -28,7 +24,7 @@ const ContactPage = () => {
         }
     }, [status]);
 
-    const sendEmail = (e: React.FormEvent) => {
+    const sendEmail = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!form.current) return;
@@ -38,49 +34,37 @@ const ContactPage = () => {
         setDebugInfo('');
 
         const formData = new FormData(form.current);
-        const templateParams = {
-            from_name: formData.get('from_name'),
-            from_email: formData.get('from_email'),
-            message: formData.get('message'),
-        };
 
-        // Using your NEW service ID and your template ID
-        emailjs
-            .send('service_wxr41rd', 'template_kr5silq', templateParams, {
-                publicKey: 'DjfzYTfRDlN2CLQbQ',
-            })
-            .then(
-                (result) => {
-                    console.log('SUCCESS!', result);
-                    setStatus('success');
-                    setMessage('Your message has been sent successfully!');
-                    if (form.current) {
-                        form.current.reset();
-                    }
-                },
-                (error) => {
-                    console.error('EmailJS Failed:', error);
+        try {
+            const response = await fetch('https://formspree.io/f/mlgeadqp', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
 
-                    // Extract error message safely
-                    let errorMessage = 'Unknown error';
-                    if (error?.text) errorMessage = error.text;
-                    else if (error?.message) errorMessage = error.message;
-                    else if (typeof error === 'string') errorMessage = error;
-                    else {
-                        try {
-                            errorMessage = JSON.stringify(error);
-                            if (errorMessage === '{}') errorMessage = 'Check console for error object';
-                        } catch (e) {
-                            errorMessage = 'Unserializable error';
-                        }
-                    }
-
-                    setDebugInfo(`Error details: ${errorMessage}`);
-                    setMessage(`Sending failed: ${errorMessage}`);
-                    setStatus('error');
-                    setShowFallback(true);
-                },
-            );
+            if (response.ok) {
+                setStatus('success');
+                setMessage('Your message has been sent successfully!');
+                if (form.current) {
+                    form.current.reset();
+                }
+            } else {
+                const data = await response.json();
+                if (Object.hasOwn(data, 'errors')) {
+                    throw new Error(data["errors"].map((error: any) => error["message"]).join(", "));
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            }
+        } catch (error: any) {
+            console.error('Formspree Failed:', error);
+            setDebugInfo(`Error details: ${error.message || error}`);
+            setMessage(`Sending failed: ${error.message || 'Unknown error'}`);
+            setStatus('error');
+            setShowFallback(true);
+        }
     };
 
     // Fallback function to handle form submission when EmailJS fails
@@ -98,7 +82,7 @@ const ContactPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white py-20">
+        <div id="contact" className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white py-20">
             <div className="container mx-auto px-4 max-w-4xl">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Me</h1>
@@ -226,17 +210,20 @@ const ContactPage = () => {
                         <h3 className="text-xl font-semibold mb-6 text-center">Connect with me</h3>
                         <div className="flex justify-center gap-6">
                             {/* Your social links here */}
-                            <a href="https://telegram.org/dl" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300">
-                                <Image src="/telegram.png" alt='telegram' width={24} height={24} className="w-6 h-6" />
+                            <a href="https://telegram.org/dl" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300 group">
+                                <FaTelegram className="w-6 h-6 text-gray-300 group-hover:text-[#0088cc] transition-colors" />
                             </a>
-                            <a href="https://whatsapp.com/dl/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300">
-                                <Image src="/whatsapp.png" alt='whatsapp' width={24} height={24} className="w-6 h-6" />
+                            <a href="https://whatsapp.com/dl/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300 group">
+                                <FaWhatsapp className="w-6 h-6 text-gray-300 group-hover:text-[#25D366] transition-colors" />
                             </a>
-                            <a href="https://youtube.com/@fenetabilu?si=HlOwdO1xjMM1iCVD" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300">
-                                <Image src="/youtube.png" alt='youtube' width={24} height={24} className="w-6 h-6" />
+                            <a href="https://youtube.com/@fenetabilu?si=HlOwdO1xjMM1iCVD" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300 group">
+                                <FaYoutube className="w-6 h-6 text-gray-300 group-hover:text-[#FF0000] transition-colors" />
                             </a>
-                            <a href="https://www.linkedin.com/in/fenet-abilu-a52354307/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300">
-                                <FilePlayIcon />
+                            <a href="https://www.linkedin.com/in/fenet-abilu-a52354307/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300 group">
+                                <FaLinkedin className="w-6 h-6 text-gray-300 group-hover:text-[#0A66C2] transition-colors" />
+                            </a>
+                            <a href="https://github.com/Fenet-Ab" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-yellow-400/30 transition-all duration-300 group">
+                                <FaGithub className="w-6 h-6 text-gray-300 group-hover:text-white transition-colors" />
                             </a>
                         </div>
                     </div>

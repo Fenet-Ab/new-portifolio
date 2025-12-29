@@ -6,12 +6,12 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
+    { name: 'Home', href: '/#home' },
+    { name: 'About', href: '/#about' },
 
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Experience', href: '/#experience' },
+    { name: 'Projects', href: '/#projects' },
+    { name: 'Contact', href: '/#contact' },
 ];
 
 export default function Navbar() {
@@ -21,24 +21,29 @@ export default function Navbar() {
 
     // Handle smooth scrolling to section
     const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-        e.preventDefault();
-        const sectionId = href.replace('#', '');
-        const element = document.getElementById(sectionId);
+        const sectionId = href.replace('/#', '');
 
-        if (element) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-            setActiveSection(sectionId);
-            setIsOpen(false); // Close mobile menu after clicking
+        if (pathname === '/') {
+            e.preventDefault();
+            const element = document.getElementById(sectionId);
+
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                setActiveSection(sectionId);
+                setIsOpen(false); // Close mobile menu after clicking
+            }
+        } else {
+            setIsOpen(false);
         }
     };
 
     // Update active section based on scroll position
     useEffect(() => {
         const handleScroll = () => {
-            const sections = navLinks.map(link => link.href.replace('#', ''));
+            const sections = navLinks.map(link => link.href.replace('/#', ''));
             // Offset must be > scroll-margin-top (112px) for active state to trigger
             const scrollPosition = window.scrollY + 150;
 
@@ -74,11 +79,11 @@ export default function Navbar() {
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex gap-8 font-medium">
                     {navLinks.map((link) => {
-                        const sectionId = link.href.replace('#', '');
+                        const sectionId = link.href.replace('/#', '');
                         const isActive = activeSection === sectionId;
 
                         return (
-                            <a
+                            <Link
                                 key={link.name}
                                 href={link.href}
                                 onClick={(e) => scrollToSection(e, link.href)}
@@ -90,7 +95,7 @@ export default function Navbar() {
                                 <span className={`absolute left-0 -bottom-1 h-0.5 bg-yellow-400 transition-all duration-300
                                     ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}
                                 `}></span>
-                            </a>
+                            </Link>
                         );
                     })}
                 </nav>
@@ -109,11 +114,11 @@ export default function Navbar() {
                 <div className="md:hidden absolute top-full left-0 w-full bg-black/90 backdrop-blur-xl border-b border-white/10 shadow-2xl animate-in slide-in-from-top-5 duration-200">
                     <nav className="flex flex-col p-4 space-y-4">
                         {navLinks.map((link) => {
-                            const sectionId = link.href.replace('#', '');
+                            const sectionId = link.href.replace('/#', '');
                             const isActive = activeSection === sectionId;
 
                             return (
-                                <a
+                                <Link
                                     key={link.name}
                                     href={link.href}
                                     onClick={(e) => scrollToSection(e, link.href)}
@@ -125,7 +130,7 @@ export default function Navbar() {
                                     `}
                                 >
                                     {link.name}
-                                </a>
+                                </Link>
                             );
                         })}
                     </nav>
