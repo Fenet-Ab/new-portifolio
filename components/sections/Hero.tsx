@@ -1,5 +1,35 @@
+"use client";
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+const TypewriterText = ({ text, className }: { text: string, className?: string }) => {
+    const [displayText, setDisplayText] = useState('');
+    const [showCursor, setShowCursor] = useState(true);
+
+    useEffect(() => {
+        let currentIndex = 0;
+        const intervalId = setInterval(() => {
+            if (currentIndex <= text.length) {
+                setDisplayText(text.slice(0, currentIndex));
+                currentIndex++;
+            } else {
+                clearInterval(intervalId);
+                setShowCursor(false);
+            }
+        }, 100); // Typing speed: 100ms per char
+
+        return () => clearInterval(intervalId);
+    }, [text]);
+
+    return (
+        <span className={className}>
+            {displayText}
+            {showCursor && <span className="animate-pulse">|</span>}
+        </span>
+    );
+};
 
 export default function Hero() {
     return (
@@ -10,9 +40,7 @@ export default function Hero() {
 
                     <h1 className="mt-20 text-5xl md:text-7xl font-bold tracking-tight leading-tight">
                         Hello, <br />
-                        <span className="text-transparent text-yellow-400">
-                            I&apos;m  Fenet
-                        </span>
+                        <TypewriterText text="I'm Fenet" className="text-transparent text-yellow-400" />
                     </h1>
 
                     <h2 className='text-2xl md:text-3xl text-gray-200 font-medium'>
