@@ -55,7 +55,7 @@ export default function Hero() {
 
                     <div className="flex flex-wrap gap-4 pt-4">
                         <a
-                            href="/Fenet_Abilu_CV.pdf"
+                            href="/Fenet_Resume.pdf"
                             download
                             target="_blank"
                             rel="noopener noreferrer"
