@@ -111,9 +111,11 @@ export default function SkillsSection() {
                 {/* Carousel Container with Infinite Scroll */}
                 <div
                     ref={scrollRef}
-                    className="flex gap-6 overflow-x-hidden pb-8 scrollbar-hide"
+                    className="flex gap-6 overflow-x-auto md:overflow-x-hidden pb-8 scrollbar-hide"
                     onMouseEnter={() => setIsPaused(true)}
                     onMouseLeave={() => setIsPaused(false)}
+                    onTouchStart={() => setIsPaused(true)}
+                    onTouchEnd={() => setIsPaused(false)}
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {duplicatedSkills.map((s, index) => (
